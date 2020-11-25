@@ -3,6 +3,9 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.cluster import kmeans
 from stemming.porter2 import stem
 from flask import Flask, request, make_response, send
+from io import BytesIO
+import time
+import zipfile
 
 app= Flask(__name__)
 
@@ -44,6 +47,25 @@ def cluster():
   kmeans=KMeans(n_clusters= no_of_clusters)
   data['cluster_num'] = kmeans.fit_predict(counts)
   data= data.drop(['clean_sum'],axis=1)
+  
+  output=BytesIO()
+  writer=pd.ExcelWriter(output, engine='xlswriter')]
+  data.to_excel(writer, sheet_name='Clusters', encoding='utf-8', index=Flase)
+  
+  memory_file = BytesIO()
+  with zipfile.ZipFile(memory_file, 'w') as zf:
+    
+  
+    names=['cluster_output.xlsx', 'file2', 'file3']
+    files=[output1, output2, output3]
+    for i in range(len(files)):
+       data=zipfile.ZipInfo(names[i])
+       data.date_time=time.localtimes(times.times())[:6]
+       data.compress_type = zipfile.ZIP.DEFLATED
+      zf.writestr(data, files[i].getvalue())
+  memory_file.seek(0)
+  
+  
   
   return 'commit'
 
